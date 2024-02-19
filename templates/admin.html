@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            --background-color: #f5f5f5;
+            --text-color: #333;
+            --form-bg-color: #fff;
+            --form-input-bg-color: #fff;
+            --button-bg-color: #007bff;
+            --button-text-color: #fff;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            --text-color: #fff;
+            --form-bg-color: #444;
+            --form-input-bg-color: #555;
+            --button-bg-color: #007bff;
+            --button-text-color: #fff;
+            background-color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: var(--background-color);
+            background-color: #ddd;
+            color: var(--text-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: var(--form-input-bg-color);
+            color: var(--text-color);
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: var(--button-bg-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 30px 0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Toggle button */
+        .toggle-container {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .toggle {
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            position: relative;
+            border-radius: 15px;
+            background-color: #ccc;
+            cursor: pointer;
+        }
+
+        .toggle .slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .toggle input {
+            display: none;
+        }
+
+        .toggle input:checked + .slider {
+            transform: translateX(30px);
+        }
+
+        /* Dark mode styles */
+        .dark-mode .container {
+            background-color: #222;
+            color: #fff;
+        }
+
+        .dark-mode input[type="text"],
+        .dark-mode textarea {
+            background-color: #555;
+            color: #fff;
+        }
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            height: 100%;
+            width: 100%;
+            display: grid;
+            place-items: center;
+        }
+
+        #checkbox {
+            display: none;
+        }
+
+        .toggle {
+            height: 80px;
+            width: 200px;
+            border-radius: 9999px;
+            background: linear-gradient(to bottom, #6ec8ff, #1f73a7);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 6px 6px 10px #0000003d;
+        }
+
+        .mountains {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            z-index: 3;
+            background-color: #1d7371;
+            transition: all 0.5s ease-in-out;
+            clip-path: polygon(
+                0% 80%,
+                25% 50%,
+                40% 70%,
+                60% 35%,
+                65% 45%,
+                80% 20%,
+                100% 80%,
+                100% 100%,
+                0% 100%
+            );
+        }
+
+        .cloud {
+            height: 8px;
+            width: 18px;
+            border-radius: 9999px;
+            background-color: rgb(255, 255, 255);
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            filter: opacity(0.5);
+        }
+
+        .sea {
+            height: 200px;
+            width: 300%;
+            border-radius: 50%;
+            position: absolute;
+            right: 50%;
+            bottom: -500%;
+            transform: translateX(50%);
+            transition: all 0.5s ease-in-out;
+            background: linear-gradient(
+                to bottom,
+                #3f75cc,
+                #06063b,
+                #06063b,
+                #06063b,
+                #06063b
+            );
+        }
+
+        .sea::before {
+            content: "";
+            height: 25px;
+            width: 15px;
+            background-color: rgba(254, 254, 254, 0.34);
+            filter: blur(5px);
+            position: absolute;
+            top: 2%;
+            left: 43%;
+        }
+
+        .star {
+            height: 2px;
+            width: 2px;
+            position: absolute;
+            top: -50%;
+            right: 15%;
+            background-color: #fff;
+            transition: all 0.5s ease-in-out;
+            filter: blur(0.8px);
+            border-radius: 50%;
+        }
+
+        .star::before {
+            content: "";
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: -50%;
+            right: 20px;
+            background-color: #fff;
+            transition: all 0.5s ease-in-out;
+            border-radius: 50%;
+        }
+
+        .star::after {
+            content: "";
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 10px;
+            right: -20px;
+            background-color: #fff;
+            transition: all 0.5s ease-in-out;
+            border-radius: 50%;
+        }
+
+        .cloud::before {
+            content: "";
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            background-color: rgb(255, 255, 255);
+            position: absolute;
+            top: -50%;
+            right: 50%;
+            transform: translateX(50%);
+        }
+
+        #checkbox:checked + .toggle {
+            background: linear-gradient(to bottom, #036daf, #003d63);
+        }
+
+        .toggle::before {
+            content: "";
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            top: 10%;
+            right: 30%;
+            border-radius: 50%;
+            background-color: #ffd34d;
+            transition: all 0.5s ease-in-out;
+            box-shadow: 0 0 15px #fef95fc3;
+        }
+
+        .toggle::after {
+            content: "";
+            height: 35px;
+            width: 35px;
+            position: absolute;
+            top: 10%;
+            left: -60%;
+            border-radius: 50%;
+            background-color: #ffffff;
+            transition: all 0.5s ease-in-out;
+            box-shadow: 0 0 10px #ffffff88;
+        }
+
+        #checkbox:checked + .toggle::before {
+            transform: translateX(280%);
+        }
+
+        #checkbox:checked + .toggle::after {
+            transform: translateX(480%);
+        }
+
+        #checkbox:checked + .toggle .mountains {
+            background-color: #05021a;
+            transform: translateY(100%);
+        }
+
+        #checkbox:checked + .toggle .sea {
+            background-color: #05021a;
+            bottom: -210%;
+        }
+
+        #checkbox:checked + .toggle .star {
+            transform: rotate(10deg);
+            top: 20%;
+        }
+
+        /* Specific styles for Clear JSON button in dark mode */
+        .dark-mode .clear-button {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .dark-mode .clear-button:hover {
+            background-color: #c82333;
+        }
+        .dark-mode .add-question {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .dark-mode .add-question:hover {
+            background-color: #c82333;
+        }
+
+        .daynight {
+            position: relative;
+            top: 9px;
+            right: -259px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="daynight">
+            <input type="checkbox" id="checkbox">
+            <label class="toggle" for="checkbox">
+                <div class="cloud"></div>
+                <div class="star"></div>
+                <div class="sea"></div>
+                <div class="mountains"></div>
+            </label>
+        </div>
+        
+        <h1>Admin View</h1>
+        <form action="{{ url_for('admin') }}" method="post">
+            <label for="subject_name">Subject Name:</label>
+            <input type="text" id="subject_name" name="subject_name" required>
+            <label for="assignment_name">Assignment Name:</label>
+            <input type="text" id="assignment_name" name="assignment_name" required>
+            <label for="question">Question:</label>
+            <input type="text" id="question" name="question" required>
+            <label for="code_block">Code Block:</label>
+            <textarea id="code_block" name="code_block" rows="5" required></textarea>
+            <button type="submit" class="add-question">Add Question</button>
+        </form>
+        <hr>
+        <h2>Assignments</h2>
+        <ul>
+            {% for subject_name, assignments in assignments.items() %}
+                {% for assignment_name, questions in assignments.items() %}
+                    <li>
+                        <a href="{{ url_for('view_assignments', subject_name=subject_name, assignment_name=assignment_name) }}">{{ subject_name }} - {{ assignment_name }}</a>
+                        ({{ questions|length }} questions)
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+        <form action="{{ url_for('clear_json') }}" method="get">
+            <button type="submit" class="clear-button">Clear JSON</button>
+        </form>
+    </div>
+    <script>
+        const checkbox = document.getElementById('checkbox');
+        const buttons = document.querySelectorAll('button');
+    
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/;SameSite=None;Secure";
+    }
+    
+        // Function to get a cookie value
+        function getCookie(name) {
+            const cookieName = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookieArray = decodedCookie.split(';');
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i];
+                while (cookie.charAt(0) === ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(cookieName) === 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return "";
+        }
+    
+        // Function to update the UI based on the cookie value
+        function updateUI() {
+        const darkModeEnabled = getCookie('darkModeEnabled') === 'true';
+        if (darkModeEnabled) {
+            document.body.classList.add('dark-mode');
+            checkbox.checked = true;
+        }
+    }
+    
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                document.body.classList.add('dark-mode');
+                setCookie('darkModeEnabled', 'true', 30);
+            } else {
+                document.body.classList.remove('dark-mode');
+                setCookie('darkModeEnabled', 'false', 30);
+            }
+        });
+    
+        // Update UI based on cookie when the page loads
+        window.addEventListener('load', updateUI);
+    
+        // Prevent toggling dark mode when buttons are clicked if dark mode is enabled
+        buttons.forEach(button => {
+        button.addEventListener('click', () => {
+                if (getCookie('darkModeEnabled') === 'true' && !button.classList.contains('add-question') && !button.classList.contains('clear-button')) {
+                    document.body.classList.remove('dark-mode');
+                    checkbox.checked = false;
+                    setCookie('darkModeEnabled', 'false', 30);
+                }
+            });
+        });
+        
+    </script>
+       
+</body>
+</html>

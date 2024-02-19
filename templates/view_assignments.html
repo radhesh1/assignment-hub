@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ assignment_name }}</title>
+    <link href="{{ url_for('static', filename='prism.css') }}" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0px 50px 0px 50px;
+            background-color: #ccc;
+            color: #333;
+            transition: background-color 0.5s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 26px;
+            font-size: 2em;
+            color: #007bff;
+            transition: text-shadow 0.3s ease;
+            padding-bottom: 30px;
+            padding-right: 60px;
+            padding-left: 5px;
+        }
+
+        h1:hover {
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); /* Add 3D effect on hover */
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding: 15px 20px 15px 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0056b3; /* slightly darker blue */
+            color: #fff;
+            font-weight: bold; /* make text bold */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #004080; /* darker blue on hover */
+        }
+
+        .back-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+        }
+
+        .back-button-container {
+            margin-top: 20px;
+        }
+
+        .back-button-container:hover .back-button {
+            background-color: #004080; /* darker blue on hover */
+        }
+
+        .back-button-container:hover .back-button:focus {
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.6);
+        }
+
+        .question-number {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        /* Inserted CSS styles */
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            --background-color: #111;
+            color: #fff;
+        }
+
+        .container.dark-mode {
+            background-color: #333;
+        }
+
+        .back-button.dark-mode {
+            background-color: #004080;
+        }
+
+        .back-button.dark-mode:hover {
+            background-color: #002c54;
+        }
+
+        .daynight{
+            position: absolute;
+            top: 36px;
+            right: 150px;
+        }
+
+        .dark-mode ul li {
+            background-color: #444;
+            padding: 15px 20px 15px 20px;
+            border-radius: 5px;
+        }
+        .toggle.dark-mode .cloud {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .toggle.dark-mode .sea {
+            background: linear-gradient(to bottom, #3f75cc, #06063b);
+        }
+
+        .toggle.dark-mode .star {
+            background-color: #fff;
+        }
+
+        .toggle.dark-mode .toggle::before {
+            background-color: #ffd34d;
+            box-shadow: 0 0 15px #fef95fc3;
+        }
+
+        .toggle.dark-mode .toggle::after {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px #ffffff88;
+        }
+
+        .toggle.dark-mode #checkbox:checked + .toggle {
+            background: linear-gradient(to bottom, #036daf, #003d63);
+        }
+
+        .toggle.dark-mode #checkbox:checked + .toggle .mountains {
+            background-color: #05021a;
+        }
+
+        .toggle.dark-mode #checkbox:checked + .toggle .sea {
+            background: linear-gradient(
+                to bottom,
+                #3f75cc,
+                #06063b,
+                #06063b,
+                #06063b,
+                #06063b
+            );
+        }
+
+        .toggle.dark-mode #checkbox:checked + .toggle .star {
+            background-color: #fff;
+        }
+
+        .toggle {
+            height: 80px;
+            width: 200px;
+            border-radius: 9999px;
+            background: linear-gradient(to bottom, #6ec8ff, #1f73a7);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 6px 6px 10px #0000003d;
+            transition: background-color 0.3s ease;
+        }
+
+        .mountains {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            z-index: 3;
+            background-color: #1d7371;
+            transition: all 0.5s ease-in-out;
+            clip-path: polygon(
+                0% 80%,
+                25% 50%,
+                40% 70%,
+                60% 35%,
+                65% 45%,
+                80% 20%,
+                100% 80%,
+                100% 100%,
+                0% 100%
+            );
+        }
+
+        .cloud {
+            height: 8px;
+            width: 18px;
+            border-radius: 9999px;
+            background-color: rgb(255, 255, 255);
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            filter: opacity(0.5);
+        }
+
+        .sea {
+            height: 200px;
+            width: 300%;
+            border-radius: 50%;
+            position: absolute;
+            right: 50%;
+            bottom: -500%;
+            transform: translateX(50%);
+            transition: all 0.5s ease-in-out;
+            background: linear-gradient(
+                to bottom,
+                #3f75cc,
+                #06063b,
+                #06063b,
+                #06063b,
+                #06063b
+            );
+        }
+
+        .sea::before {
+            content: "";
+            height: 25px;
+            width: 15px;
+            background-color: rgba(254, 254, 254, 0.34);
+            filter: blur(5px);
+            position: absolute;
+            top: 2%;
+            left: 43%;
+        }
+
+        .star {
+            height: 2px;
+            width: 2px;
+            position: absolute;
+            top: -50%;
+            right: 15%;
+            background-color: #fff;
+            transition: all 0.5s ease-in-out;
+            filter: blur(0.8px);
+            border-radius: 50%;
+        }
+
+        .star::before {
+            content: "";
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: -50%;
+            right: 20px;
+            background-color: #fff;
+            transition: all 0.5s ease-in-out;
+            border-radius: 50%;
+        }
+
+        .star::after {
+            content: "";
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 10px;
+            right: -20px;
+            background-color: #fff;
+            transition: all 0.5s ease-in-out;
+            border-radius: 50%;
+        }
+
+        .cloud::before {
+            content: "";
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            background-color: rgb(255, 255, 255);
+            position: absolute;
+            top: -50%;
+            right: 50%;
+            transform: translateX(50%);
+        }
+
+        #checkbox {
+            display: none;
+        }
+
+        #checkbox:checked + .toggle {
+            background: linear-gradient(to bottom, #036daf, #003d63);
+        }
+
+        .toggle::before {
+            content: "";
+            height: 40px;
+            width: 40px;
+            position: absolute;
+            top: 10%;
+            right: 30%;
+            border-radius: 50%;
+            background-color: #ffd34d;
+            transition: all 0.5s ease-in-out;
+            box-shadow: 0 0 15px #fef95fc3;
+        }
+
+        .toggle::after {
+            content: "";
+            height: 35px;
+            width: 35px;
+            position: absolute;
+            top: 10%;
+            left: -60%;
+            border-radius: 50%;
+            background-color: #ffffff;
+            transition: all 0.5s ease-in-out;
+            box-shadow: 0 0 10px #ffffff88;
+        }
+
+        #checkbox:checked + .toggle::before {
+            transform: translateX(280%);
+        }
+
+        #checkbox:checked + .toggle::after {
+            transform: translateX(480%);
+        }
+
+        #checkbox:checked + .toggle .mountains {
+            background-color: #05021a;
+            transform: translateY(100%);
+        }
+
+        #checkbox:checked + .toggle .sea {
+            background-color: #05021a;
+            bottom: -210%;
+        }
+
+        #checkbox:checked + .toggle .star {
+            transform: rotate(10deg);
+            top: 20%;
+        }
+        .dark-mode .back-button {
+            background-color: #dc3545;
+        }
+
+        .dark-mode .back-button:hover {
+            background-color: #c82333;
+        }
+
+        .dark-mode h1 {
+            color: #dc3545;
+            margin-top: 26px;
+            padding-bottom: 30px;
+        }
+
+        .dark-mode h1:hover {
+            text-shadow: 3px 3px 6px rgb(192, 7, 7); /* Add 3D effect on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Inserted HTML code starts here -->
+        <div class="daynight">
+            <label for="checkbox">
+                <input type="checkbox" name="" id="checkbox">
+                <div class="toggle">
+                    <div class="cloud"></div>
+                    <div class="star"></div>
+                    <div class="sea"></div>
+                    <div class="mountains"></div>
+                </div>
+            </label>
+        </div>
+        <!-- Inserted HTML code ends here -->
+        <h1><a href="{{ url_for('view_assignments', subject_name=subject_name, assignment_name=assignment_name) }}" style="color: inherit; text-decoration: none;" target="_blank">{{ assignment_name }}</a></h1>
+        <ul class="">
+            {% set question_number = 1 %}
+            {% for item in questions %}
+                <li>
+                    <p><strong>Q{{ question_number }}. </strong> {{ item.question }}</p>
+                    <pre><code class="language-cpp">{{ item.code_block }}</code></pre>
+                </li>
+                {% set question_number = question_number + 1 %}
+            {% endfor %}
+        </ul>
+        <div class="back-button-container">
+            <a href="{{ url_for('list_assignments') }}" class="back-button">Back to Assignments</a>
+        </div>
+    
+    </div>
+    
+    <script src="{{ url_for('static', filename='prism.js') }}"></script>
+    <script>
+        const checkbox = document.getElementById('checkbox');
+
+        checkbox.addEventListener('change', function () {
+            document.body.classList.toggle('dark-mode');
+            document.querySelector('.container').classList.toggle('dark-mode');
+            document.querySelector('.back-button').classList.toggle('dark-mode');
+            document.querySelector('.toggle').classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
