@@ -7,8 +7,9 @@ assignments = {}
 
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def list_assignments():
+    # Add code here to handle assignments view
+    return render_template('assignments.html', assignments_list=assignments)
 
 
 @app.route('/admin', methods=['GET', 'POST'])
@@ -44,12 +45,6 @@ def clear_json():
     global assignments
     assignments = {}
     return redirect(url_for('admin'))
-
-
-@app.route('/assignments')
-def list_assignments():
-    return render_template('assignments.html', assignments=assignments)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
