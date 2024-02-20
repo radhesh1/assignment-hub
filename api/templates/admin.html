@@ -432,6 +432,11 @@
             }
             .daynight {
                 right: -65px;
+
+            }
+            .toggle {
+                height: 60px;
+                width: 151px;
             }
             button[type="submit"]:hover {
                 background-color: #0056b3;
@@ -467,9 +472,10 @@
                 <div class="mountains"></div>
             </label>
         </div>
-        
         <h1>Admin View</h1>
         <form action="{{ url_for('admin') }}" method="post">
+            <label for="main_category">Main Category:</label>
+            <input type="text" id="main_category" name="main_category" required>
             <label for="subject_name">Subject Name:</label>
             <input type="text" id="subject_name" name="subject_name" required>
             <label for="assignment_name">Assignment Name:</label>
@@ -480,15 +486,18 @@
             <textarea id="code_block" name="code_block" rows="5" required></textarea>
             <button type="submit" class="add-question">Add Question</button>
         </form>
+        
         <hr>
         <h2>Assignments</h2>
         <ul>
-            {% for subject_name, assignments in assignments.items() %}
-                {% for assignment_name, questions in assignments.items() %}
-                    <li>
-                        <a href="{{ url_for('view_assignments', subject_name=subject_name, assignment_name=assignment_name) }}">{{ subject_name }} - {{ assignment_name }}</a>
-                        ({{ questions|length }} questions)
-                    </li>
+            {% for main_category, subjects in assignments.items() %}
+                {% for subject_name, assignments in subjects.items() %}
+                    {% for assignment_name, questions in assignments.items() %}
+                        <li>
+                            <a href="{{ url_for('view_assignments', main_category=main_category, subject_name=subject_name, assignment_name=assignment_name) }}">{{ subject_name }} - {{ assignment_name }}</a>
+                            ({{ questions|length }} questions)
+                        </li>
+                    {% endfor %}
                 {% endfor %}
             {% endfor %}
         </ul>

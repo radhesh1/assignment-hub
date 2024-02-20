@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Assignments</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,19 +25,57 @@
 
         h1 {
             margin-top: -111px;
-            font-size: 2em;
+            font-size: 50px;
+            font-weight: bold;
             color: #007bff;
             transition: text-shadow 0.3s ease;
-            padding-bottom: 37px;
-            padding-top: 35px;
+            padding-bottom: 7px;
+            padding-top: 7px;
         }
-
+        #main_category {
+            text-rendering: optimizeLegibility;
+            background: rgba(255, 255, 255, 0.5); /* Adjust the transparency as needed */
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            border-radius: 10px;
+        }
+        .filter_button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .filter_button:hover {
+            background-color: #002c54;
+        }
         h1:hover {
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); /* Add 3D effect on hover */
         }
 
         h2 {
+            margin-top: 10px;
             padding-left: 10px;
+            padding-bottom: 10px;
+            font-size: 2em;
+            font-weight: bolder;
+            color: blue;
+            background: rgba( 155, 155, 155, 0.7 );
+            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+            backdrop-filter: blur( 5px );
+            -webkit-backdrop-filter: blur( 5px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+        }
+        h3 {
+            font-size: 2em;
+            font-weight: bold;
+            padding-left: 18px;
+        }
+        article {
+            background-color: #ccc;
+            border-radius: 10px;
+            padding-top: 10px;
             padding-bottom: 10px;
         }
 
@@ -86,7 +125,9 @@
             top: -2px;
             right: -550px;
         }
-
+        .dark-mode article {
+            background-color: #222;
+        }
         .dark-mode ul {
             margin-left: 20px;
         }
@@ -95,6 +136,9 @@
             background-color: #444;
             padding: 15px 20px 15px 20px;
             border-radius: 5px;
+        }
+        .dark-mode h2 {
+            color:  #dc3545;
         }
         .toggle.dark-mode .cloud {
             background-color: rgba(255, 255, 255, 0.5);
@@ -332,6 +376,13 @@
             color: inherit; 
             text-decoration: none;
         }
+        .dark-mode .filter_button{
+            background-color: #dc3545;
+        }
+        .dark-mode .filter_button:hover{
+            background-color: #c82333;
+        }
+
         .dark-mode .list-item {
             color: #dc3545;
         }
@@ -365,13 +416,14 @@
             }
             h1{ 
                 padding-right: 106px;
+                margin-top: -22px;
             }
         }
-        @media screen and (max-width: 768px){
+        @media screen and (min-width: 481px) and (max-width: 768px){
             .daynight{
                 position: relative;
                 top: 37px;
-                right: -160px;
+                right: -380px;
                 padding-left: 1%;
                 margin-left: -1px;
             }
@@ -388,8 +440,12 @@
             h1{ 
                 padding-right: 106px;
                 margin-top: -50px;
+            }   
+        }
+        @media screen and (min-width: 769px) and (max-width: 1024px){
+            h1{ 
+                font-size: 50px;
             }
-            
         }
     </style>
 </head>
@@ -407,20 +463,47 @@
             </label>
         </div>
         <h1 class="mt-5 mb-4">All Assignments</h1>
-        {% for subject_name, assignments_list in assignments_list.items() %}
-            <article>
-                <h2>{{ subject_name }}</h2> <!-- Displaying subject name as a heading -->
-                <ul class="list-group mb-4">
-                    {% for assignment_name, questions in assignments_list.items() %}
-                        <li class="list-group-item">
-                            <a href="{{ url_for('view_assignments', subject_name=subject_name, assignment_name=assignment_name) }}" class="list-item">{{ assignment_name }}</a>
-                            <iframe src="{{ url_for('view_assignments', subject_name=subject_name, assignment_name=assignment_name) }}" frameborder="0" class="iframe-container"></iframe>
-                        </li>
+        <form action="/" method="GET" class="flex items-center">
+            <div class="relative">
+                <select name="main_category" id="main_category" class="appearance-none border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200">
+                    <option selected disabled>Select Main Category</option>
+                    {% for main_category in main_categories %}
+                        <option value="{{ main_category }}">{{ main_category }}</option>
                     {% endfor %}
-                </ul>
-            </article>
-        {% endfor %}
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9.293 13.707a1 1 0 01-1.414-1.414l3-3a1 1 0 011.414 1.414l-3 3z" clip-rule="evenodd"/></svg>
+                </div>
+            </div>
+            <button type="submit" class="filter_button ml-2">Filter</button>
+        </form>
+        
+        {% if selected_main_category %}
+            <h2>{{ selected_main_category }}</h2>
+            {% for subject_name, assignments_list in assignments_list.items() %}
+                <article class="">
+                    <h3>{{ subject_name }}</h3>
+                    <ul class="list-group mb-4">
+                        {% for assignment_name, questions in assignments_list.items() %}
+                            <li class="list-group-item">
+                                <a href="{{ url_for('view_assignments', main_category=selected_main_category, subject_name=subject_name, assignment_name=assignment_name) }}" class="list-item">{{ assignment_name }}</a>
+                                <iframe src="{{ url_for('view_assignments', main_category=selected_main_category, subject_name=subject_name, assignment_name=assignment_name) }}" frameborder="0" class="iframe-container"></iframe>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </article>
+            {% endfor %}
+        {% endif %}
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#main_category').change(function() {
+                $(this).closest('form').submit();
+            });
+        });
+    </script>
+
     <script>
         const checkbox = document.getElementById('checkbox');
         const iframes = document.querySelectorAll('.iframe-container');
