@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_caching import Cache
 import json
 import os
 
 app = Flask(__name__)
+cache = Cache(app)
 
 # Path to the assignments.json file
 JSON_FILE_PATH = 'assignments.json'
@@ -23,6 +25,9 @@ def save_assignments(assignments):
 # Initialize assignments dictionary from assignments.json
 assignments = load_assignments()
 
+# Cache the assignments data
+@cache.cached(timeout=300)  # Cache for 5 minutes
+
 
 @app.route('/')
 def list_assignments():
@@ -33,12 +38,14 @@ def list_assignments():
     # Extract main categories
     main_categories = list(assignments.keys())
 
+    main_categories = list(get_cached_assignments().keys())
+
     if selected_main_category:
         # Filter assignments based on the selected main category
-        assignments_list = assignments.get(selected_main_category, {})
+        assignments_list = get_cached_assignments().get(selected_main_category, {})
     else:
         # If no main category is selected, show all assignments
-        assignments_list = assignments
+        assignments_list = get_cached_assignments()
 
     return render_template('assignments.html', main_categories=main_categories, assignments_list=assignments_list, selected_main_category=selected_main_category)
 
