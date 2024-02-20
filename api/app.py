@@ -27,6 +27,8 @@ assignments = load_assignments()
 
 # Cache the assignments data
 @cache.cached(timeout=300)  # Cache for 5 minutes
+def get_cached_assignments():
+    return assignments
 
 
 @app.route('/')
