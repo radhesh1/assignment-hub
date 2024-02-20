@@ -1,9 +1,27 @@
 from flask import Flask, render_template, request, redirect, url_for
+import json
+import os
 
 app = Flask(__name__)
 
-# Initialize empty JSON data
-assignments = {}
+# Path to the assignments.json file
+JSON_FILE_PATH = 'assignments.json'
+
+# Function to load assignments data from assignments.json
+def load_assignments():
+    if os.path.exists(JSON_FILE_PATH):
+        with open(JSON_FILE_PATH, 'r') as file:
+            return json.load(file)
+    else:
+        return {}
+
+# Function to save assignments data to assignments.json
+def save_assignments(assignments):
+    with open(JSON_FILE_PATH, 'w') as file:
+        json.dump(assignments, file)
+
+# Initialize assignments dictionary from assignments.json
+assignments = load_assignments()
 
 
 @app.route('/')
