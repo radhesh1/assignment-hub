@@ -46,6 +46,7 @@
 
         form {
             margin-bottom: 30px;
+            width:84%
         }
 
         label {
@@ -384,6 +385,75 @@
             top: 9px;
             right: -259px;
         }
+        @media screen and (max-width: 1024px){
+            .container {
+                padding: 15px;
+                margin: 0px;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            input[type="text"],
+            textarea {
+                padding: 8px;
+            }
+            button[type="submit"] {
+                padding: 8px 16px;
+            }
+            .daynight {
+                right: -155px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+            h1 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            input[type="text"],
+            textarea {
+                padding: 6px;
+                font-size: 14px;
+            }
+            button[type="submit"] {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            .daynight {
+                right: -65px;
+            }
+            button[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+            .dark-mode .add-question:hover {
+                background-color: #c82333;
+            }
+            .dark-mode .clear-button:hover {
+                background-color: #c82333;
+            }
+            h1 {
+                scale: 1.5;
+                padding-top: 12px;
+                margin-bottom: 20px;
+            }
+            h2 {
+                scale: 1.5;
+                padding-bottom: 21px;
+                padding-top: -45px;
+                margin-top: -33px;
+            }
+        }   
     </style>
 </head>
 <body>
@@ -405,9 +475,9 @@
             <label for="assignment_name">Assignment Name:</label>
             <input type="text" id="assignment_name" name="assignment_name" required>
             <label for="question">Question:</label>
-            <textarea id="question" name="question" rows="99" required></textarea>            
+            <textarea id="question" name="question" rows="5" required></textarea>
             <label for="code_block">Code Block:</label>
-            <textarea id="code_block" name="code_block" rows="99" required></textarea>
+            <textarea id="code_block" name="code_block" rows="5" required></textarea>
             <button type="submit" class="add-question">Add Question</button>
         </form>
         <hr>
