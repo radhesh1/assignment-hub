@@ -436,7 +436,7 @@
             {% set question_number = namespace(value=1) %}
             {% for item in questions %}
                 <li>
-                    <p><strong>Q{{ question_number.value }}. </strong>{{ item.question }}</p>
+                    <p><strong>Q{{ question_number.value }}. </strong><span id="question_{{ question_number.value }}" class="question-text">{{ item.question }}</span></p>
                     <pre><code class="language-cpp">{{ item.code_block }}</code></pre>
                 </li>
                 {% set question_number.value = question_number.value + 1 %}
@@ -452,6 +452,18 @@
     
     <script src="{{ url_for('static', filename='prism.js') }}"></script>
     <script>
+        function convertToBr() {
+            var questionTexts = document.querySelectorAll('.question-text');
+            questionTexts.forEach(function(element) {
+                var text = element.textContent;
+                var textWithBreaks = text.replace(/\n/g, "<br>").replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+                element.innerHTML = textWithBreaks;
+            });
+        }
+
+        // Automatically convert text on page load
+        window.addEventListener('load', convertToBr);
+
         const checkbox = document.getElementById('checkbox');
 
         checkbox.addEventListener('change', function () {
