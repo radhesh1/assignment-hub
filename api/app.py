@@ -70,7 +70,7 @@ def admin():
         else:
             # If main category doesn't exist, create a new main category with the subject, assignment, and details
             assignments[main_category] = {subject_name: {assignment_name: [{'question': question, 'code_block': code_block}]}}
-        
+        save_assignments(assignments)
         # After updating the assignments dictionary, redirect to the admin page
         return redirect(url_for('admin'))
 
